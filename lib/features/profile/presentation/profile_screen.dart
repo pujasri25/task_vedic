@@ -9,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F8FD),
       body: SafeArea(
-        top: false, // Maintain full-bleed purple header
+        top: false,
         child: SingleChildScrollView(
           child: Column(
             children: [

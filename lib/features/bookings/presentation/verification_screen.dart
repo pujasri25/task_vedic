@@ -150,7 +150,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
           decoration: const InputDecoration(counterText: "", border: InputBorder.none),
           onChanged: (value) => _onChanged(value, index),
           onTap: () {
-            setState(() {}); // Refresh to show active border
+            setState(() {});
           },
         ),
       ),

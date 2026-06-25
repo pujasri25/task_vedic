@@ -40,10 +40,8 @@ class BookingDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Declaration Accept/Decline at the top for Pending bookings
                   if (booking.status == 'Pending') _buildActionDeclaration(context),
 
-                  // Status Banner Section
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
@@ -67,7 +65,6 @@ class BookingDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // 1. Customer Details Section
                   _buildSectionHeader('CUSTOMER DETAILS'),
                   Card(
                     color: Colors.white,
@@ -108,7 +105,6 @@ class BookingDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // 2. Booking Information / Service Details
                   _buildSectionHeader('BOOKING DETAILS'),
                   Card(
                     color: Colors.white,
@@ -130,7 +126,6 @@ class BookingDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // 3. Payment Summary
                   _buildSectionHeader('PAYMENT DETAILS'),
                   Card(
                     color: Colors.white,

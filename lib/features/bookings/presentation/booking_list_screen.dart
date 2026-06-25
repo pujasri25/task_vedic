@@ -143,7 +143,6 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
             ),
             const SizedBox(height: 12),
 
-            // Central Data Content List Engine Container
             Expanded(
               child: BlocBuilder<BookingBloc, BookingState>(
                 builder: (context, state) {

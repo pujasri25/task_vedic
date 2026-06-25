@@ -4,7 +4,6 @@ import '../../../data/repository/booking_repository.dart';
 import '../../../models/booking_model.dart';
 
 
-// Simple base classes without Equatable dependencies
 abstract class BookingEvent {}
 class LoadBookingsEvent extends BookingEvent {}
 class FilterBookingsEvent extends BookingEvent {
