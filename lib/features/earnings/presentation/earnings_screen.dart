@@ -69,7 +69,7 @@ class EarningsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               _buildTransactionItem('Ganesh Homam Payout', '08 June 2024', '+₹42,000', Colors.green),
-              _buildTransactionItem('Satyanarayana Puja Payout', '05 June 2024', '+₹12,500', Colors.green),
+              _buildTransactionItem('Satyanarayana Pooja Payout', '05 June 2024', '+₹12,500', Colors.green),
               _buildTransactionItem('Bank Withdrawal', '01 June 2024', '-₹20,000', Colors.red),
               const SizedBox(height: 24),
               SizedBox(
