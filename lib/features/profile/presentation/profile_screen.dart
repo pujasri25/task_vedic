@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   _buildProfileStat('142', 'Bookings'),
                   _buildProfileStat('12', 'Years Exp.'),
-                  _buildProfileStat('4.8', 'Rating'),
+                  _buildProfileStat('4.9', 'Rating'),
                 ],
               ),
               const SizedBox(height: 32),
