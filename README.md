@@ -65,7 +65,7 @@ lib/
     flutter run
     ```
 
-## 📸 UI Design Highlights
+## UI Design Highlights
 -   **Theme**: Professional Vedic Purple (`#3B137B`) with Gold and Amber accents.
 -   **Navigation**: Seamless transitions between the dashboard and detailed workflow screens.
 
