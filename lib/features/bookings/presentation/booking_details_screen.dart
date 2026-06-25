@@ -33,128 +33,134 @@ class BookingDetailsScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Declaration Accept/Decline at the top for Pending bookings
-              if (booking.status == 'Pending') _buildActionDeclaration(context),
+          child: Hero(
+            tag: 'booking-${booking.id}',
+            child: Material(
+              type: MaterialType.transparency,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Declaration Accept/Decline at the top for Pending bookings
+                  if (booking.status == 'Pending') _buildActionDeclaration(context),
 
-              // Status Banner Section
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: _getStatusColor(booking.status).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: _getStatusColor(booking.status).withOpacity(0.3)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                     Icon(_getStatusIcon(booking.status), color: _getStatusColor(booking.status), size: 18),
-                     const SizedBox(width: 8),
-                     Text(
-                      _getStatusText(booking.status),
-                      style: TextStyle(color: _getStatusColor(booking.status), fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                  // Status Banner Section
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: _getStatusColor(booking.status).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: _getStatusColor(booking.status).withOpacity(0.3)),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // 1. Customer Details Section
-              _buildSectionHeader('CUSTOMER DETAILS'),
-              Card(
-                color: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: const Color(0xFF6236A7),
-                        child: Text(
-                          booking.customerName.isNotEmpty ? booking.customerName[0] : 'U',
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(_getStatusIcon(booking.status), color: _getStatusColor(booking.status), size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          _getStatusText(booking.status),
+                          style: TextStyle(color: _getStatusColor(booking.status), fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(booking.customerName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: List.generate(5, (index) => const Icon(Icons.star, color: Colors.amber, size: 14)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 1. Customer Details Section
+                  _buildSectionHeader('CUSTOMER DETAILS'),
+                  Card(
+                    color: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: const Color(0xFF6236A7),
+                            child: Text(
+                              booking.customerName.isNotEmpty ? booking.customerName[0] : 'U',
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(height: 4),
-                            Text(booking.phone, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(booking.customerName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: List.generate(5, (index) => const Icon(Icons.star, color: Colors.amber, size: 14)),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(booking.phone, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+                              ],
+                            ),
+                          ),
+                          IconButton(onPressed: (){}, icon: const Icon(Icons.phone, color: Colors.green)),
+                          IconButton(onPressed: (){}, icon: const Icon(Icons.chat_bubble, color: Colors.blue)),
+                        ],
                       ),
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.phone, color: Colors.green)),
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.chat_bubble, color: Colors.blue)),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-              // 2. Booking Information / Service Details
-              _buildSectionHeader('BOOKING DETAILS'),
-              Card(
-                color: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      _buildInfoRow(Icons.spa, 'Service', booking.serviceName),
-                      _buildInfoRow(Icons.access_time, 'Duration', booking.duration),
-                      _buildInfoRow(Icons.calendar_today, 'Date', booking.date),
-                      _buildInfoRow(Icons.alarm, 'Time', booking.time),
-                      _buildInfoRow(Icons.location_on, 'Location', booking.location, isMultiline: true),
-                      _buildInfoRow(Icons.people, 'Attendees', booking.attendees),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // 3. Payment Summary
-              _buildSectionHeader('PAYMENT DETAILS'),
-              Card(
-                color: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      _buildPriceRow('Service Fee', '₹${booking.serviceFee.toInt()}'),
-                      _buildPriceRow('Platform Fee', '₹${booking.platformFee.toInt()}'),
-                      _buildPriceRow('GST / Taxes', '₹${booking.gst.toInt()}'),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Divider(),
+                  // 2. Booking Information / Service Details
+                  _buildSectionHeader('BOOKING DETAILS'),
+                  Card(
+                    color: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          _buildInfoRow(Icons.spa, 'Service', booking.serviceName),
+                          _buildInfoRow(Icons.access_time, 'Duration', booking.duration),
+                          _buildInfoRow(Icons.calendar_today, 'Date', booking.date),
+                          _buildInfoRow(Icons.alarm, 'Time', booking.time),
+                          _buildInfoRow(Icons.location_on, 'Location', booking.location, isMultiline: true),
+                          _buildInfoRow(Icons.people, 'Attendees', booking.attendees),
+                        ],
                       ),
-                      _buildPriceRow('Total Amount', '₹${booking.totalAmount.toInt()}', isBold: true),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+
+                  // 3. Payment Summary
+                  _buildSectionHeader('PAYMENT DETAILS'),
+                  Card(
+                    color: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.shade200)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          _buildPriceRow('Service Fee', '₹${booking.serviceFee.toInt()}'),
+                          _buildPriceRow('Platform Fee', '₹${booking.platformFee.toInt()}'),
+                          _buildPriceRow('GST / Taxes', '₹${booking.gst.toInt()}'),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8.0),
+                            child: Divider(),
+                          ),
+                          _buildPriceRow('Total Amount', '₹${booking.totalAmount.toInt()}', isBold: true),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  if (booking.status == 'Confirmed') _buildStartRitualAction(context),
+                  if (booking.status == 'In Progress') _buildEndRitualAction(context),
+
+                  const SizedBox(height: 20),
+                ],
               ),
-              const SizedBox(height: 20),
-
-              if (booking.status == 'Confirmed') _buildStartRitualAction(context),
-              if (booking.status == 'In Progress') _buildEndRitualAction(context),
-
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
         ),
       ),

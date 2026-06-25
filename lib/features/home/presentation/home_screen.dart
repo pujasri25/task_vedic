@@ -23,11 +23,16 @@ class HomeScreen extends StatelessWidget {
               total = allBookings.length.toString();
               pending = allBookings.where((b) => b.status == 'Pending').length.toString();
               confirmed = allBookings.where((b) => b.status == 'Confirmed').length.toString();
-              pendingBookings = allBookings.reversed.toList(); 
+              pendingBookings = allBookings.reversed.toList();
             }
 
-            return CustomScrollView(
-              slivers: [
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<BookingBloc>().add(LoadBookingsEvent());
+              },
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
                 // Header Section
                 SliverToBoxAdapter(
                   child: Container(
@@ -160,17 +165,18 @@ class HomeScreen extends StatelessWidget {
                   sliver: pendingBookings.isEmpty
                       ? const SliverToBoxAdapter(child: Center(child: Text('No bookings found')))
                       : SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) => _buildBookingCard(context, pendingBookings[index]),
-                            childCount: pendingBookings.length,
-                          ),
-                        ),
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) => _buildBookingCard(context, pendingBookings[index]),
+                      childCount: pendingBookings.length,
+                    ),
+                  ),
                 ),
                 const SliverToBoxAdapter(child: SizedBox(height: 30)),
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
+      ),
       ),
     );
   }
@@ -200,53 +206,70 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildBookingCard(BuildContext context, dynamic booking) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: InkWell(
-        onTap: () {
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(radius: 18, backgroundColor: Colors.grey.shade200, child: Text(booking.customerName[0], style: const TextStyle(color: Color(0xFF3B137B), fontWeight: FontWeight.bold))),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(booking.customerName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                        Text(booking.serviceName, style: const TextStyle(color: Colors.grey, fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
-                      ],
-                    ),
-                  ),
-                  _buildStatusBadge(booking.status),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Hero(
+      tag: 'booking-${booking.id}',
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BookingDetailsScreen(booking: booking)),
+            );
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Column(
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
-                      const SizedBox(width: 6),
-                      Text(booking.date, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                      const SizedBox(width: 10),
-                      const Icon(Icons.access_time_outlined, size: 14, color: Colors.grey),
-                      const SizedBox(width: 6),
-
-                      Text(booking.duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                      CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.grey.shade200,
+                          child: Text(booking.customerName[0],
+                              style: const TextStyle(color: Color(0xFF3B137B), fontWeight: FontWeight.bold))),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(booking.customerName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                            Text(booking.serviceName,
+                                style: const TextStyle(color: Colors.grey, fontSize: 13),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis),
+                          ],
+                        ),
+                      ),
+                      _buildStatusBadge(booking.status),
                     ],
                   ),
-                  Text('₹${booking.totalAmount.toInt()}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF3B137B))),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_today, size: 14, color: Colors.grey),
+                          const SizedBox(width: 6),
+                          Text(booking.date, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                          const SizedBox(width: 10),
+                          const Icon(Icons.access_time_outlined, size: 14, color: Colors.grey),
+                          const SizedBox(width: 6),
+                          Text(booking.duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                        ],
+                      ),
+                      Text('₹${booking.totalAmount.toInt()}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF3B137B))),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
